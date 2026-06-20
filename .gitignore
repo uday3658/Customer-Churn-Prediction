@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment
+venv/
+env/
+.env
+
+# Conda
+.conda/
+
+# Artifacts (generated files)
+artifacts/
+
+# MLflow
+mlruns/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Model files
+*.pkl
+*.h5
+*.keras
+
+# Data files
+*.csv
+*.zip
+*.json
+
+# Logs
+logs/
+*.log
+
+# VS Code
+.vscode/
+
+# Mac
+.DS_Store
+**/.DS_Store
+
+# Config with credentials
+.env
+secrets.yaml
+
+# Setup
+*.egg-info/
