@@ -12,3 +12,10 @@ class DataIngestionConfig:
     root_dir:Path
     raw_data_path:Path
     database_info: DatabaseConfig
+
+
+@dataclass(frozen=True)
+class DataTransformationConfig:
+    root_dir:Path
+    input_data_path:Path
+    transformed_data_path:Path    

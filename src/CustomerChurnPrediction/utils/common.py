@@ -13,9 +13,6 @@ from ensure import ensure_annotations
 from pathlib import Path
 
 
-
-
-
 @ensure_annotations
 def read_yaml(path_to_yaml: Path) -> ConfigBox:
     """reads yaml file and returns
@@ -53,6 +50,20 @@ def create_directories(path_to_directories: list, verbose=True):
             logger.info(f"created directory at: {path}")
 
 
+def save_data(df: pd.DataFrame, file_path: str) -> None:
+    """
+    Save a dataframe to CSV, creating the destination directory if needed.
+ 
+    Args:
+        df (pd.DataFrame): Dataframe to save.
+        file_path (str): Full path (including filename) to save the CSV to.
+    """
+    create_directories([os.path.dirname(file_path)])
+ 
+    df.to_csv(file_path, index=False)
+ 
+    logger.info(f"Data saved to {file_path}: {df.shape[0]} rows, {df.shape[1]} columns")
+    
 @ensure_annotations
 def save_json(path: Path, data: dict):
     """save json data
