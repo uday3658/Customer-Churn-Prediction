@@ -1,6 +1,6 @@
 from src.CustomerChurnPrediction.constants import *
 from src.CustomerChurnPrediction.utils.common import read_yaml, create_directories
-from src.CustomerChurnPrediction.entity.config_entity import DatabaseConfig,DataIngestionConfig,DataTransformationConfig,ModelTrainingConfig
+from src.CustomerChurnPrediction.entity.config_entity import DatabaseConfig,DataIngestionConfig,DataTransformationConfig,ModelTrainingConfig,ModelEvaluationConfig
 
 class ConfigurationManager:
     def __init__(self,config_filepath = CONFIG_FILE_PATH):
@@ -54,3 +54,22 @@ class ConfigurationManager:
         )
 
         return model_training_config
+    
+    def get_model_evaluation_config(self):
+
+        config = self.config.model_evaluation
+
+        create_directories([config.root_dir])
+
+        model_evaluation_config = ModelEvaluationConfig(
+            root_dir=config.root_dir,
+            input_data_path=config.input_data_path,
+            base_model_path=config.base_model_path,
+            tuned_model_path=config.tuned_model_path,
+            scores_file_path=config.scores_file_path,
+            base_cm_path = config.base_cm_path,
+            tuned_cm_path=config.tuned_cm_path,
+            roc_curve_path=config.roc_curve_path
+        )
+
+        return model_evaluation_config

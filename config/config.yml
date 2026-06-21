@@ -26,9 +26,9 @@ data_ingestion:
   root_dir: artifacts/data_ingestion
   raw_data_path: artifacts/data_ingestion/raw_data.csv
 
-database:
-    database_name: churn_db
-    table_name: customer_churn
+  database:
+      database_name: churn_db
+      table_name: customer_churn
 
 data_transformation:
   root_dir: artifacts/data_transformation
@@ -47,6 +47,11 @@ model_evaluation:
   base_model_path: artifacts/model/base_model.pkl
   tuned_model_path: artifacts/model/tuned_model.pkl
   scores_file_path: artifacts/model_evaluation/scores.json
+  base_cm_path: artifacts/model_evaluation/XGBoost.png
+  tuned_cm_path: artifacts/model_evaluation/XGBoost_Tuned.png
+  roc_curve_path: artifacts/model_evaluation/roc_curve.png
+
+  
 
 
 
