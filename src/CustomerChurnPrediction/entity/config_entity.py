@@ -18,4 +18,12 @@ class DataIngestionConfig:
 class DataTransformationConfig:
     root_dir:Path
     input_data_path:Path
-    transformed_data_path:Path    
+    transformed_data_path:Path
+
+
+@dataclass(frozen=True)
+class ModelTrainingConfig:
+    root_dir:Path
+    training_data_path:Path
+    base_model_path:Path
+    tuned_model_path:Path        

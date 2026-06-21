@@ -5,7 +5,7 @@ from CustomerChurnPrediction.utils.exception import CustomException
 from CustomerChurnPrediction.components.data_ingestion import DataIngestion
 from CustomerChurnPrediction.pipelines.stage_01_data_ingestion import DataIngestionTrainingPipeline
 from CustomerChurnPrediction.pipelines.stage_02_data_transformation import DataTransformationPipeline
-
+from CustomerChurnPrediction.pipelines.stage_03_data_training import ModelTrainingPipeline
 
 STAGE_NAME = "Data Ingestion"
 
@@ -26,3 +26,13 @@ try:
     logger.info(f">>>>>>>>>> stage {STAGE_NAME} Completed <<<<<<<<<<<<\n\nX==========X")
 except Exception as e:
     raise CustomException(e, sys)    
+
+STAGE_NAME = "Model Training"
+
+try:
+    logger.info(f">>>>>>>>>> stage {STAGE_NAME} started <<<<<<<<<<<<")
+    obj = ModelTrainingPipeline()
+    obj.main()
+    logger.info(f">>>>>>>>>> stage {STAGE_NAME} Completed <<<<<<<<<<<<\n\nX==========X")
+except Exception as e:
+        raise CustomException(e, sys)
