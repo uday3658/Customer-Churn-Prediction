@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 from src.CustomerChurnPrediction.utils.logger import logger
 from src.CustomerChurnPrediction.utils.exception import CustomException
 from src.CustomerChurnPrediction.entity.config_entity import DataIngestionConfig
-from src.CustomerChurnPrediction.utils.common import create_directories
+from src.CustomerChurnPrediction.utils.common import create_directories,save_data
 
 load_dotenv()
 
@@ -79,5 +79,4 @@ class DataIngestion:
         database_name = self.config.database_info.database_name
         table_name = self.config.database_info.table_name
         df = self.read_sql_data(database_name,table_name)
-        create_directories([os.path.dirname(self.config.raw_data_path)])
-        df.to_csv(self.config.raw_data_path)
+        save_data(df,self.config.raw_data_path)
