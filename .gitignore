@@ -54,4 +54,4 @@ secrets.yaml
 # Setup
 *.egg-info/
 
-.main_ipynb
+.main_ipynb/
