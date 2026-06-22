@@ -8,8 +8,8 @@ from sklearn.ensemble import RandomForestClassifier
 from lightgbm import LGBMClassifier
 from xgboost import XGBClassifier
 from sklearn.metrics import (classification_report,precision_score,recall_score,f1_score,roc_auc_score,)
-from src.CustomerChurnPrediction.entity.config_entity import ModelTrainingConfig
-from src.CustomerChurnPrediction.utils.logger import logger
+from CustomerChurnPrediction.entity.config_entity import ModelTrainingConfig
+from CustomerChurnPrediction.utils.logger import logger
 
 
 class ModelTraining:

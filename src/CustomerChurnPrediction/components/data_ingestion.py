@@ -3,10 +3,10 @@ import sys
 import pandas as pd
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
-from src.CustomerChurnPrediction.utils.logger import logger
-from src.CustomerChurnPrediction.utils.exception import CustomException
-from src.CustomerChurnPrediction.entity.config_entity import DataIngestionConfig
-from src.CustomerChurnPrediction.utils.common import create_directories,save_data
+from CustomerChurnPrediction.utils.logger import logger
+from CustomerChurnPrediction.utils.exception import CustomException
+from CustomerChurnPrediction.entity.config_entity import DataIngestionConfig
+from CustomerChurnPrediction.utils.common import create_directories,save_data
 
 load_dotenv()
 

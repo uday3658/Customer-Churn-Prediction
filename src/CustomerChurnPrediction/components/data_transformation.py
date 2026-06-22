@@ -1,8 +1,8 @@
 import pandas as pd
 import pandas as pd
-from src.CustomerChurnPrediction.utils.logger import logger
-from src.CustomerChurnPrediction.entity.config_entity import DataTransformationConfig
-from src.CustomerChurnPrediction.utils.common import create_directories,save_data
+from CustomerChurnPrediction.utils.logger import logger
+from CustomerChurnPrediction.entity.config_entity import DataTransformationConfig
+from CustomerChurnPrediction.utils.common import create_directories,save_data
 
 class DataTransformation:
     """Handles cleaning, encoding, and feature transformation for the Telco Churn dataset."""

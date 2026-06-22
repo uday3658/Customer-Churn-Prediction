@@ -20,6 +20,6 @@ pydantic
 sqlalchemy
 pymysql 
 python-dotenv
-
+dvc
 -e .
 

@@ -1,6 +1,6 @@
-from src.CustomerChurnPrediction.constants import *
-from src.CustomerChurnPrediction.utils.common import read_yaml, create_directories
-from src.CustomerChurnPrediction.entity.config_entity import DatabaseConfig,DataIngestionConfig,DataTransformationConfig,ModelTrainingConfig,ModelEvaluationConfig
+from CustomerChurnPrediction.constants import *
+from CustomerChurnPrediction.utils.common import read_yaml, create_directories
+from CustomerChurnPrediction.entity.config_entity import DatabaseConfig,DataIngestionConfig,DataTransformationConfig,ModelTrainingConfig,ModelEvaluationConfig
 
 class ConfigurationManager:
     def __init__(self,config_filepath = CONFIG_FILE_PATH):
@@ -26,6 +26,7 @@ class ConfigurationManager:
         )
 
         return data_ingestion_config
+    
     def get_data_transformation_config(self):
 
         config = self.config.data_transformation

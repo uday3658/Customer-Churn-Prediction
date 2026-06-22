@@ -3,6 +3,7 @@ import json
 import pandas as pd
 import optuna
 import dagshub
+from dotenv import load_dotenv
 from pathlib import Path
 import joblib
 import seaborn as sns
@@ -23,6 +24,7 @@ from sklearn.metrics import (
     ConfusionMatrixDisplay,
     classification_report,
 )
+load_dotenv()
 
 import os
 import sys

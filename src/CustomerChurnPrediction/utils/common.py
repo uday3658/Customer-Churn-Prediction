@@ -7,8 +7,8 @@ from box import ConfigBox
 
 import json
 
-from src.CustomerChurnPrediction.utils.logger import logger
-from src.CustomerChurnPrediction.utils.exception import CustomException
+from CustomerChurnPrediction.utils.logger import logger
+from CustomerChurnPrediction.utils.exception import CustomException
 from ensure import ensure_annotations
 from pathlib import Path
 
