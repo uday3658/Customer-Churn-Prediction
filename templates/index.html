@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Churn Risk Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EAEEF2;
+    --surface:#FFFFFF;
+    --surface-2:#F4F6F8;
+    --ink:#12161D;
+    --muted:#5B6472;
+    --line:#DCE2E8;
+    --accent:#2D5FDF;
+    --accent-ink:#10306E;
+    --panel:#12161D;
+    --panel-2:#1B212B;
+    --panel-line:#2A313C;
+    --panel-text:#E7E9ED;
+    --panel-muted:#8B93A1;
+    --teal:#18876F;
+    --radius-lg:16px;
+    --radius:12px;
+    --radius-sm:8px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Inter',sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+  }
+  .page{max-width:1180px;margin:0 auto;padding:48px 24px 96px;}
+
+  .masthead{margin-bottom:36px;max-width:640px;}
+  .masthead h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    font-size:28px;
+    letter-spacing:-0.01em;
+    margin:0 0 8px;
+  }
+  .masthead p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.5;}
+
+  .console{display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:start;}
+
+  .intake-block{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius-lg);
+    padding:24px 24px 26px;
+    margin-bottom:18px;
+  }
+  .eyebrow{
+    display:flex;align-items:center;gap:8px;
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;font-size:11.5px;
+    text-transform:uppercase;letter-spacing:0.07em;
+    color:var(--muted);
+    padding-bottom:12px;margin-bottom:16px;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow svg{width:15px;height:15px;flex-shrink:0;color:var(--accent);}
+
+  .field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field label{
+    font-size:11px;font-weight:600;
+    text-transform:uppercase;letter-spacing:0.04em;
+    color:var(--muted);
+  }
+  select,input[type=number]{
+    appearance:none;
+    padding:10px 12px;
+    border:1px solid var(--line);
+    border-radius:var(--radius-sm);
+    font-size:14px;
+    font-family:'Inter',sans-serif;
+    background:var(--surface-2);
+    color:var(--ink);
+    width:100%;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  select{
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%235B6472' stroke-width='1.6'><path d='M4 6l4 4 4-4'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 10px center;
+    padding-right:30px;
+  }
+  select:focus,input[type=number]:focus{
+    outline:none;
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(45,95,223,0.15);
+    background:var(--surface);
+  }
+
+  .readout{position:sticky;top:28px;}
+  .readout-card{
+    background:var(--panel);
+    color:var(--panel-text);
+    border-radius:var(--radius-lg);
+    padding:24px;
+  }
+  .readout-title{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;font-size:13px;
+    text-transform:uppercase;letter-spacing:0.06em;
+    color:var(--panel-muted);
+    margin:0 0 16px;
+  }
+
+  button{
+    width:100%;padding:13px;
+    font-family:'Inter',sans-serif;
+    font-size:14.5px;font-weight:600;
+    border:none;border-radius:var(--radius-sm);
+    background:var(--accent);color:#fff;
+    cursor:pointer;
+    transition:background .15s, transform .1s;
+  }
+  button:hover{background:#2752C6;}
+  button:active{transform:scale(0.99);}
+  button:disabled{opacity:0.6;cursor:default;}
+  button:focus-visible{outline:2px solid #fff;outline-offset:2px;}
+
+  .loading{
+    display:none;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;color:var(--panel-muted);
+    margin-top:10px;
+  }
+  .error{
+    display:none;
+    color:#FF8A78;font-size:13px;
+    margin-bottom:14px;
+    line-height:1.4;
+  }
+
+  .readout-empty{
+    margin-top:16px;
+    padding-top:16px;
+    border-top:1px solid var(--panel-line);
+    font-size:13px;line-height:1.5;
+    color:var(--panel-muted);
+  }
+
+  .result-card{display:none;margin-top:18px;padding-top:18px;border-top:1px solid var(--panel-line);}
+  .result-card.show{display:block;}
+  #resultCard.show ~ .readout-empty{display:none;}
+
+  .churn{font-family:'Space Grotesk',sans-serif;font-size:21px;font-weight:600;color:#FF8A6E;}
+  .safe{font-family:'Space Grotesk',sans-serif;font-size:21px;font-weight:600;color:#5FD6B0;}
+
+  .meter-label{
+    font-size:12px;color:var(--panel-muted);
+    margin-top:14px;margin-bottom:8px;
+    display:flex;justify-content:space-between;
+  }
+  .prob-bg{
+    position:relative;
+    background:var(--panel-2);
+    border:1px solid var(--panel-line);
+    border-radius:99px;height:10px;overflow:hidden;
+  }
+  .prob-bg::after{
+    content:"";position:absolute;top:0;left:25%;
+    width:1px;height:100%;background:rgba(255,255,255,0.25);
+  }
+  .prob-bar{height:100%;border-radius:99px;transition:width 0.5s ease, background .3s;}
+  .meter-ticks{display:flex;justify-content:space-between;margin-top:6px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--panel-muted);}
+
+  .stats{display:flex;gap:10px;margin-top:18px;}
+  .stat{background:var(--panel-2);border:1px solid var(--panel-line);border-radius:var(--radius-sm);padding:10px 12px;flex:1;}
+  .stat-label{font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;color:var(--panel-muted);margin-bottom:5px;}
+  .stat-val{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:var(--panel-text);}
+
+  @media (max-width:900px){
+    .console{grid-template-columns:1fr;}
+    .readout{position:static;}
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="masthead">
+      <h1>Churn churn prediction</h1>
+      <p>Enter customer information for prediction.</p>
+    </div>
+
+    <div class="console">
+      <div class="intake">
+
+        <div class="intake-block">
+          <div class="eyebrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg>
+            Account &amp; household
+          </div>
+          <div class="field-grid">
+            <div class="field"><label for="gender">Gender</label><select id="gender"><option>Male</option><option>Female</option></select></div>
+            <div class="field"><label for="SeniorCitizen">Senior citizen</label><select id="SeniorCitizen"><option value="0">No</option><option value="1">Yes</option></select></div>
+            <div class="field"><label for="Partner">Partner</label><select id="Partner"><option>Yes</option><option>No</option></select></div>
+            <div class="field"><label for="Dependents">Dependents</label><select id="Dependents"><option>Yes</option><option>No</option></select></div>
+            <div class="field"><label for="tenure">Tenure (months)</label><input type="number" id="tenure" min="0" max="72" value="12"></div>
+          </div>
+        </div>
+
+        <div class="intake-block">
+          <div class="eyebrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v4a2 2 0 0 1-2 2C10.5 21 3 13.5 3 5a2 2 0 0 1 2-1z"/></svg>
+            Phone service
+          </div>
+          <div class="field-grid">
+            <div class="field"><label for="PhoneService">Phone service</label><select id="PhoneService"><option>Yes</option><option>No</option></select></div>
+            <div class="field"><label for="MultipleLines">Multiple lines</label><select id="MultipleLines"><option>Yes</option><option>No</option><option>No phone service</option></select></div>
+          </div>
+        </div>
+
+        <div class="intake-block">
+          <div class="eyebrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5a16 16 0 0 1 20 0"/><path d="M5.5 12.5a11 11 0 0 1 13 0"/><path d="M9 16.5a6 6 0 0 1 6 0"/><circle cx="12" cy="20" r="1"/></svg>
+            Internet &amp; add-ons
+          </div>
+          <div class="field-grid">
+            <div class="field"><label for="InternetService">Internet service</label><select id="InternetService"><option>DSL</option><option>Fiber optic</option><option>No</option></select></div>
+            <div class="field"><label for="OnlineSecurity">Online security</label><select id="OnlineSecurity"><option>Yes</option><option>No</option><option>No internet service</option></select></div>
+            <div class="field"><label for="OnlineBackup">Online backup</label><select id="OnlineBackup"><option>Yes</option><option>No</option><option>No internet service</option></select></div>
+            <div class="field"><label for="DeviceProtection">Device protection</label><select id="DeviceProtection"><option>Yes</option><option>No</option><option>No internet service</option></select></div>
+            <div class="field"><label for="TechSupport">Tech support</label><select id="TechSupport"><option>Yes</option><option>No</option><option>No internet service</option></select></div>
+            <div class="field"><label for="StreamingTV">Streaming TV</label><select id="StreamingTV"><option>Yes</option><option>No</option><option>No internet service</option></select></div>
+            <div class="field"><label for="StreamingMovies">Streaming movies</label><select id="StreamingMovies"><option>Yes</option><option>No</option><option>No internet service</option></select></div>
+          </div>
+        </div>
+
+        <div class="intake-block">
+          <div class="eyebrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 9.5h19"/></svg>
+            Billing &amp; contract
+          </div>
+          <div class="field-grid">
+            <div class="field"><label for="Contract">Contract</label><select id="Contract"><option>Month-to-month</option><option>One year</option><option>Two year</option></select></div>
+            <div class="field"><label for="PaperlessBilling">Paperless billing</label><select id="PaperlessBilling"><option>Yes</option><option>No</option></select></div>
+            <div class="field"><label for="PaymentMethod">Payment method</label><select id="PaymentMethod"><option>Electronic check</option><option>Mailed check</option><option>Bank transfer (automatic)</option><option>Credit card (automatic)</option></select></div>
+            <div class="field"><label for="MonthlyCharges">Monthly charges ($)</label><input type="number" id="MonthlyCharges" step="0.01" value="70.00"></div>
+            <div class="field"><label for="TotalCharges">Total charges ($)</label><input type="number" id="TotalCharges" step="0.01" value="840.00"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <aside class="readout">
+        <div class="readout-card">
+          <p class="readout-title">Risk reading</p>
+
+          <div id="errorMsg" class="error"></div>
+
+          <button id="predictBtn">Predict churn</button>
+          <p class="loading" id="loading">Running prediction…</p>
+
+          <div class="result-card" id="resultCard">
+            <div id="resultLabel"></div>
+
+            <div class="meter-label"><span>Churn probability</span></div>
+            <div class="prob-bg"><div class="prob-bar" id="probBar"></div></div>
+            <div class="meter-ticks"><span>0%</span><span>25%</span><span>100%</span></div>
+
+            <div class="stats">
+              <div class="stat"><div class="stat-label">Probability</div><div class="stat-val" id="probVal">—</div></div>
+             
+            </div>
+          </div>
+
+          <div class="readout-empty">Awaiting subscriber details. Fill in the form and run the prediction to see a risk reading here.</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('predictBtn').addEventListener('click', async () => {
+      const err = document.getElementById('errorMsg');
+      const loading = document.getElementById('loading');
+      const btn = document.getElementById('predictBtn');
+      err.style.display = 'none';
+
+      const tenure = parseFloat(document.getElementById('tenure').value);
+      const monthly = parseFloat(document.getElementById('MonthlyCharges').value);
+      const total = parseFloat(document.getElementById('TotalCharges').value);
+
+      if (isNaN(tenure) || isNaN(monthly) || isNaN(total)) {
+        err.textContent = 'Please fill in all numeric fields correctly.';
+        err.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      loading.style.display = 'block';
+
+      const params = new URLSearchParams({
+        gender: document.getElementById('gender').value,
+        SeniorCitizen: document.getElementById('SeniorCitizen').value,
+        Partner: document.getElementById('Partner').value,
+        Dependents: document.getElementById('Dependents').value,
+        tenure, PhoneService: document.getElementById('PhoneService').value,
+        MultipleLines: document.getElementById('MultipleLines').value,
+        InternetService: document.getElementById('InternetService').value,
+        OnlineSecurity: document.getElementById('OnlineSecurity').value,
+        OnlineBackup: document.getElementById('OnlineBackup').value,
+        DeviceProtection: document.getElementById('DeviceProtection').value,
+        TechSupport: document.getElementById('TechSupport').value,
+        StreamingTV: document.getElementById('StreamingTV').value,
+        StreamingMovies: document.getElementById('StreamingMovies').value,
+        Contract: document.getElementById('Contract').value,
+        PaperlessBilling: document.getElementById('PaperlessBilling').value,
+        PaymentMethod: document.getElementById('PaymentMethod').value,
+        MonthlyCharges: monthly, TotalCharges: total,
+      });
+
+      try {
+        const res = await fetch(`/api/predict?${params.toString()}`, { method: 'POST' });
+        if (!res.ok) throw new Error('Server error');
+        const data = await res.json();
+
+        const prob = data.churn_probability;
+        const pred = data.churn_prediction;
+        const pct = (prob * 100).toFixed(1);
+
+        document.getElementById('resultLabel').innerHTML = pred === 1
+          ? `<span class="churn">Will churn</span>`
+          : `<span class="safe">Will not churn</span>`;
+        document.getElementById('probBar').style.width = pct + '%';
+        document.getElementById('probBar').style.background = prob >= 0.25 ? '#e74c3c' : '#27ae60';
+        document.getElementById('probVal').textContent = pct + '%';
+      
+        document.getElementById('resultCard').classList.add('show');
+      } catch (e) {
+        err.textContent = 'Could not connect to prediction server. Make sure FastAPI is running.';
+        err.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        loading.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
