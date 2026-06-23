@@ -21,5 +21,6 @@ sqlalchemy
 pymysql 
 python-dotenv
 dvc
+ensure
 -e .
 
