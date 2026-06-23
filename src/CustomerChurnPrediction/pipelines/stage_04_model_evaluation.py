@@ -6,7 +6,6 @@ from CustomerChurnPrediction.utils.logger import logger
 from CustomerChurnPrediction.utils.exception import CustomException
 from CustomerChurnPrediction.components.model_evaluation import ModelEvaluation 
 
-
 STAGE_NAME = "Model Evaluation"
 
 
