@@ -15,10 +15,9 @@ class PredictionPipeline:
 
 
     def __init__(self):
-        config = read_yaml(CONFIG_FILE_PATH)
-        model_path = config.model_training.tuned_model_path
+       
         logger.info("Loading tuned model...")
-        self.model = joblib.load(model_path)
+        self.model = joblib.load(self.MODEL_PATH)
         logger.info("Model loaded successfully.")
 
 
