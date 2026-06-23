@@ -84,7 +84,8 @@ jobs:
 
       - name: Stop and remove container if running
         run: |
-          docker ps -q --filter "name=Customer_Churn_Prediction" | grep -q . && docker stop Customer_Churn_Prediction && docker rm -fv Customer_Churn_Prediction
+          docker stop Customer_Churn_Prediction || true
+          docker rm -fv Customer_Churn_Prediction || true
 
       - name: Run Docker Image to serve users
         run: |
