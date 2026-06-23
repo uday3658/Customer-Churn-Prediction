@@ -22,5 +22,6 @@ pymysql
 python-dotenv
 dvc
 ensure
+python-multipart
 -e .
 
