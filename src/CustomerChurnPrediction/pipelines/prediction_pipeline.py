@@ -13,6 +13,7 @@ class PredictionPipeline:
     THRESHOLD = 0.25  # must match ModelTraining.THRESHOLD
     MODEL_PATH = "model/tuned_model.pkl"
 
+
     def __init__(self):
         config = read_yaml(CONFIG_FILE_PATH)
         model_path = config.model_training.tuned_model_path
