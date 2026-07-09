@@ -1,25 +1,3 @@
-# artifacts_root: artifacts
-
-# data_ingestion:
-#   root_dir: artifacts/data_ingestion
-#   raw_data_path: artifacts/data_ingestion/raw_data.csv
-
-#   database:
-#     database_name: churn_db
-#     table_name: customer_churn
-
-# data_transformation:
-#   root_dir: artifacts/data_transformation
-#   input_data_path: artifacts/data_ingestion/raw_data.csv
-#   transformed_data_path: artifacts/data_transformation/transformed_data.csv
-
-# model_training:
-# root_dir: artifacts/training
-# training_data_path: artifacts/data_transformation/transformed_data.csv
-# base_model_path: artifacts/model/base_model.pkl
-# tuned_model_path: artifacts/model/tuned_model.pkl
-
-
 artifacts_root: artifacts
 
 data_ingestion:
